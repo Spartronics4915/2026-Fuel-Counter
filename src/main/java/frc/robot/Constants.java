@@ -16,4 +16,14 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class CounterConstants {
+    public static final int CAN1_ID = 3;
+
+    public static final int WALL_DISTANCE = 180;
+    public static final int BALL_DETECT_DISTANCE = 65; 
+  
+    
+    
+  }
 }
