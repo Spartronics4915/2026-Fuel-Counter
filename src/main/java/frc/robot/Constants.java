@@ -19,9 +19,11 @@ public final class Constants {
 
   public static class CounterConstants {
     public static final int CAN1_ID = 3;
-
-    public static final int WALL_DISTANCE = 180;
-    public static final int BALL_DETECT_DISTANCE = 65; 
+    
+    public static final int BALL_VARIATION = 1;
+    public static final int WALL_DISTANCE = 900;
+    public static final int BALL_DETECT_DISTANCE = 125; 
+    public static final double DELAY_TIME = 0.01;
   
     
     

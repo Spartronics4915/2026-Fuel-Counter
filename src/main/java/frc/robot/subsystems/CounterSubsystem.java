@@ -1,31 +1,48 @@
 package frc.robot.subsystems;
 
 
+import java.util.function.BooleanSupplier;
+
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CounterConstants;
 
 public class CounterSubsystem extends SubsystemBase{
 
   LaserCan can1 = new LaserCan(CounterConstants.CAN1_ID);
   public int totalCount = 0;
+ 
   public CounterSubsystem(){
     SmartDashboard.putNumber("count", 0);
     SmartDashboard.putBoolean("Reset Count", false);
+    bindCommands();
   }
-
-  int distance = 0;
   
-  boolean wasBall = false; 
+  private int getDistance(){
+    if(can1.getMeasurement() == null ){
+      return 999;
+    } else {
+      return can1.getMeasurement().distance_mm;
+    }
+  }
  
 
-  private boolean ball(){
-    if( 0 <= distance && distance < CounterConstants.BALL_DETECT_DISTANCE ){
+  BooleanSupplier ball = () -> {
+    if( 0 <= getDistance() && getDistance() < CounterConstants.BALL_DETECT_DISTANCE ){
       return true;
     }else{
       return false;
     }
+  };
+
+  
+  Trigger ballTrig = new Trigger(ball);
+
+  private void bindCommands(){
+    ballTrig.onFalse(runOnce(()-> {totalCount += 1;}));
+    
   }
 
   private void resetChecker(){
@@ -37,19 +54,15 @@ public class CounterSubsystem extends SubsystemBase{
 
   @Override
   public void periodic() {
-    LaserCan.Measurement measurement = can1.getMeasurement();
-    if(measurement ==null){
-      return;
-    } else{
-      distance = measurement.distance_mm;
-    }
-    if( wasBall && !ball() ){
-      totalCount += 1;
-    }
+    
+    
+    
     SmartDashboard.putNumber("count",totalCount);
-    SmartDashboard.putNumber("Can Distance", distance);
-   wasBall = ball();
-   resetChecker();
+    SmartDashboard.putNumber("Can Distance", getDistance());
+    resetChecker();
+
+
+    
   }
 
 }
