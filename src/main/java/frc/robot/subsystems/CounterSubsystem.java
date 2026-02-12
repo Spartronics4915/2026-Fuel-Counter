@@ -5,6 +5,8 @@ import java.util.function.BooleanSupplier;
 
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CounterConstants;
@@ -13,13 +15,7 @@ public class CounterSubsystem extends SubsystemBase{
 
   LaserCan can1 = new LaserCan(CounterConstants.CAN1_ID);
   public int totalCount = 0;
- 
-  public CounterSubsystem(){
-    SmartDashboard.putNumber("count", 0);
-    SmartDashboard.putBoolean("Reset Count", false);
-    bindCommands();
-  }
-  
+
   private int getDistance(){
     if(can1.getMeasurement() == null ){
       return 999;
@@ -27,7 +23,6 @@ public class CounterSubsystem extends SubsystemBase{
       return can1.getMeasurement().distance_mm;
     }
   }
- 
 
   BooleanSupplier ball = () -> {
     if( 0 <= getDistance() && getDistance() < CounterConstants.BALL_DETECT_DISTANCE ){
@@ -36,33 +31,38 @@ public class CounterSubsystem extends SubsystemBase{
       return false;
     }
   };
-
-  
   Trigger ballTrig = new Trigger(ball);
+
+
+  BooleanSupplier resetClicked = () -> {
+    if(SmartDashboard.getBoolean("Reset Count", false)){
+      return true;
+     }else{
+      return false;
+     }
+  };
+  Trigger resetButton = new Trigger(resetClicked);
+
+  public void resetCount(){
+    totalCount = 0;
+    SmartDashboard.putBoolean("Reset Count", false);
+  }
 
   private void bindCommands(){
     ballTrig.onFalse(runOnce(()-> {totalCount += 1;}));
-    
+    resetButton.onTrue(runOnce(() -> {resetCount();}));
   }
 
-  private void resetChecker(){
-    if(SmartDashboard.getBoolean("Reset Count", false)){
-      totalCount = 0;
-      SmartDashboard.putBoolean("Reset Count", false);
-    }
+  public CounterSubsystem(){
+    SmartDashboard.putNumber("count", 0);
+    SmartDashboard.putBoolean("Reset Count", false);
+    bindCommands();
   }
-
+  
   @Override
   public void periodic() {
-    
-    
-    
     SmartDashboard.putNumber("count",totalCount);
     SmartDashboard.putNumber("Can Distance", getDistance());
-    resetChecker();
-
-
-    
   }
 
 }
