@@ -43,10 +43,10 @@ public class CounterSubsystem extends SubsystemBase{
   }
 
   private void bindCommands(){
-    sensor1Trig.onFalse(runOnce(()-> {totalCount += 1;}));
-    sensor2Trig.onFalse(runOnce(()-> {totalCount += 1;}));
-    sensor3Trig.onFalse(runOnce(()-> {totalCount += 1;}));
-    sensor4Trig.onFalse(runOnce(()-> {totalCount += 1;}));
+    sensor1Trig.onTrue(runOnce(()-> {totalCount += 1;}));
+    sensor2Trig.onTrue(runOnce(()-> {totalCount += 1;}));
+    sensor3Trig.onTrue(runOnce(()-> {totalCount += 1;}));
+    sensor4Trig.onTrue(runOnce(()-> {totalCount += 1;}));
 
     resetButton.onTrue(runOnce(() -> {resetCount();}));
   }

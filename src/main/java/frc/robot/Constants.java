@@ -19,9 +19,9 @@ public final class Constants {
 
   public static class CounterConstants {
     public static final int SENSOR1_ID = 0;
-    public static final int SENSOR2_ID = 0;
-    public static final int SENSOR3_ID = 0;
-    public static final int SENSOR4_ID = 0;
+    public static final int SENSOR2_ID = 1;
+    public static final int SENSOR3_ID = 2;
+    public static final int SENSOR4_ID = 3;
 
     
   }
