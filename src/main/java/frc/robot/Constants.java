@@ -22,7 +22,10 @@ public final class Constants {
     public static final int SENSOR2_ID = 1;
     public static final int SENSOR3_ID = 2;
     public static final int SENSOR4_ID = 3;
-
-    
+  }
+  public static class LightConstants {
+    public static final int LED_PORT = 0;
+    public static final int LED_LENGTH = 300; 
+    public static final double SCROLL_SPEED = 10;
   }
 }
