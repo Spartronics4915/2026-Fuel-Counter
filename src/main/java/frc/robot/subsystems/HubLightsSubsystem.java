@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +22,9 @@ public class HubLightsSubsystem extends SubsystemBase{
 
     private BooleanSupplier matchSequenceStarted = () -> { return SmartDashboard.getBoolean("Start Hub Sequence", false);};
     private Trigger matchSequenceStartedTrig = new Trigger(matchSequenceStarted);
+
+    private BooleanSupplier celebrationsStartedSup = () -> { return SmartDashboard.getBoolean("Start Score Celebrations", false);};
+    private Trigger celebrationsTrig = new Trigger(celebrationsStartedSup);
 
     private AddressableLED ledStrip = new AddressableLED(LED_PORT);
     private AddressableLEDBuffer ledBuffer =  new AddressableLEDBuffer(LED_LENGTH);
@@ -37,7 +41,7 @@ public class HubLightsSubsystem extends SubsystemBase{
         0, Color.kGold, 0.1, Color.kBlue, 0.2, Color.kGold, 0.3, Color.kBlue,0.4, Color.kGold, 
         0.5, Color.kBlue, 0.6, Color.kGold, 0.7, Color.kBlue,0.8, Color.kGold, 0.9, Color.kBlue));
     private LEDPattern spartyScroll = spartyBase.scrollAtRelativeSpeed(Percent.per(Second).of(SCROLL_SPEED));
-
+    private LEDPattern rainbow = LEDPattern.rainbow(255, 128);
     
 
     public void setState(String input){
@@ -80,6 +84,8 @@ public class HubLightsSubsystem extends SubsystemBase{
         SmartDashboard.putBoolean("Start Hub Sequence", false);
         ledStrip.setData(ledBuffer);
         ledStrip.start();
+        SmartDashboard.putBoolean("Start Score Celebrations", false);
+        celebrationsTrig.onTrue(runOnce(() -> {state = "ScoreCela";}));
     }
 
     @Override
@@ -88,5 +94,27 @@ public class HubLightsSubsystem extends SubsystemBase{
             spartyScroll.applyTo(ledBuffer);}
         ledStrip.setData(ledBuffer);
         SmartDashboard.putString("State",state);
+    }
+    public Command ballScored(){
+        return this.runOnce(() -> {ballScoredTrig();});
+    }
+    public Command resetCommand(){
+        return this.runOnce(() -> {reset();});
+    }
+    private void reset(){
+        state = "Scroll";
+    }
+    private void ballScoredTrig(){
+        if( state == "ScoreCela"){
+             CommandScheduler.getInstance().schedule(Commands.sequence(
+                runOnce(() -> {rainbow.applyTo(ledBuffer);}),
+                Commands.waitSeconds(0.5),
+                runOnce(() -> {green.applyTo(ledBuffer);}),
+                Commands.waitSeconds(0.5),
+                runOnce(() -> {rainbow.applyTo(ledBuffer);}),
+                Commands.waitSeconds(0.5),
+                runOnce(() -> {spartyBase.applyTo(ledBuffer);})
+             ));
+        }
     }
 }

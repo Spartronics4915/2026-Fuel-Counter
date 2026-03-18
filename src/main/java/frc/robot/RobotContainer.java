@@ -25,9 +25,14 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+
   public RobotContainer() {
     // Configure the trigger bindings
-  
+    counterSubsystem.sensor1Trig.onTrue(hubLightsSubsystem.ballScored());
+    counterSubsystem.sensor2Trig.onTrue(hubLightsSubsystem.ballScored());
+    counterSubsystem.sensor3Trig.onTrue(hubLightsSubsystem.ballScored());
+    counterSubsystem.sensor4Trig.onTrue(hubLightsSubsystem.ballScored());
+    counterSubsystem.resetButton.onTrue(hubLightsSubsystem.resetCommand());
   }
 
   

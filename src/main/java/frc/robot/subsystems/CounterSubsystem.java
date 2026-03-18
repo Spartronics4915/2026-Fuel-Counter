@@ -30,13 +30,13 @@ public class CounterSubsystem extends SubsystemBase{
   BooleanSupplier sensor3On = () -> {return sensor3.get();};
   BooleanSupplier sensor4On = () -> {return sensor4.get();};
 
-  Trigger sensor1Trig = new Trigger(sensor1On);
-  Trigger sensor2Trig = new Trigger(sensor2On);
-  Trigger sensor3Trig = new Trigger(sensor3On);
-  Trigger sensor4Trig = new Trigger(sensor4On);
+  public Trigger sensor1Trig = new Trigger(sensor1On);
+  public Trigger sensor2Trig = new Trigger(sensor2On);
+  public Trigger sensor3Trig = new Trigger(sensor3On);
+  public Trigger sensor4Trig = new Trigger(sensor4On);
 
   BooleanSupplier resetClicked = () -> {return SmartDashboard.getBoolean("Reset Count", false);};
-  Trigger resetButton = new Trigger(resetClicked);
+  public Trigger resetButton = new Trigger(resetClicked);
 
   public void resetCount(){
     totalScore = 0;
