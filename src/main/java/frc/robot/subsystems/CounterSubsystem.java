@@ -70,12 +70,12 @@ public class CounterSubsystem extends SubsystemBase{
   }
 
   private void bindCommands(){
-    sensor1Trig.onTrue(runOnce(()-> {ballScored();}));
-    sensor2Trig.onTrue(runOnce(()-> {ballScored();}));
-    sensor3Trig.onTrue(runOnce(()-> {ballScored();}));
-    sensor4Trig.onTrue(runOnce(()-> {ballScored();}));
+    sensor1Trig.onTrue(runOnce(()-> {ballScored();}).ignoringDisable(true));
+    sensor2Trig.onTrue(runOnce(()-> {ballScored();}).ignoringDisable(true));
+    sensor3Trig.onTrue(runOnce(()-> {ballScored();}).ignoringDisable(true));
+    sensor4Trig.onTrue(runOnce(()-> {ballScored();}).ignoringDisable(true));
 
-    resetButton.onTrue(runOnce(() -> {resetCount();}));
+    resetButton.onTrue(runOnce(() -> {resetCount();}).ignoringDisable(true));
   }
 
   public CounterSubsystem(){
